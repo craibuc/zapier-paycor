@@ -6,13 +6,9 @@ run the tests in this file.
 */
 
 const zapier = require('zapier-platform-core');
+
 const App = require('../index');
 const appTester = zapier.createAppTester(App);
-
-const crypto = require('crypto');
-const { assert } = require('console');
-
-// load .env
 zapier.tools.env.inject();
 
 describe('authentication', () => {
@@ -22,7 +18,7 @@ describe('authentication', () => {
     describe('when valid credentials are supplied', () => {
 
         // arrange
-        bundle = {
+        const bundle = {
             authData: {
                 client_id: process.env.CLIENT_ID,
                 client_secret: process.env.CLIENT_SECRET,
@@ -40,8 +36,7 @@ describe('authentication', () => {
             );
 
             // assert
-            results.should.have.property('access_token');
-            // results.access_token.should.not.equal(null);
+            expect(results).toHaveProperty('access_token');
         });
       
     });
@@ -49,7 +44,7 @@ describe('authentication', () => {
     describe.skip('when invalid credentials are supplied', () => {
 
         // arrange
-        bundle = {
+        const bundle = {
             authData: {
                 client_id: '40038d33-cb15-4b68-98ef-f05fe44d6904',
                 client_secret: '40038d33-cb15-4b68-98ef-f05fe44d6904',
@@ -60,18 +55,10 @@ describe('authentication', () => {
       it('throws an error', async () => {
 
         // act/assert
-        try {
-            await appTester(
-                App.authentication.sessionConfig.perform,
-                bundle
-            );
-
-            // forces the test fail in case appTester() does not throw.
-            assert.fail('The expected Error was not thrown.');
-        }
-        catch (e) {
-            assert(e.message.includes('Received 401 code'))
-        }
+        await expect(appTester(
+            App.authentication.test,
+            bundle
+        )).rejects.toThrow();
 
       });
 
@@ -86,7 +73,7 @@ describe('authentication', () => {
       it('returns meta data', async () => {
     
         // arrange
-        bundle = {
+        const bundle = {
             authData: {
                 access_token: process.env.ACCESS_TOKEN,
                 subscription_key: process.env.SUBSCRIPTION_KEY,
@@ -99,9 +86,11 @@ describe('authentication', () => {
             bundle
         );
 
+        console.log('results',results)
+
         // assert
-        results.userLegalEntities[0].should.have.property('legalEntityId');
-        results.userLegalEntities[0].should.have.property('tenantId');
+        expect(results.userLegalEntities[0]).toHaveProperty('legalEntityId');
+        expect(results.userLegalEntities[0]).toHaveProperty('tenantId');
 
       });
   
@@ -112,7 +101,7 @@ describe('authentication', () => {
       it('throws an error', async () => {
 
         // arrange
-        bundle = {
+        const bundle = {
             authData: {
                 access_token: '40038d33-cb15-4b68-98ef-f05fe44d6904',
                 subscription_key: '40038d33-cb15-4b68-98ef-f05fe44d6904',
@@ -120,18 +109,10 @@ describe('authentication', () => {
         };
 
         // act/assert
-        try {
-            await appTester(
-                App.authentication.test,
-                bundle
-            );
-
-            // forces the test fail in case appTester() does not throw.
-            assert.fail('The expected Error was not thrown.');
-        }
-        catch (e) {
-            assert(e.message.includes('Received 401 code'))
-        }
+        await expect(appTester(
+            App.authentication.test,
+            bundle
+        )).rejects.toThrow();
 
       });
   
