@@ -1,12 +1,10 @@
-require('should');
-
 const zapier = require('zapier-platform-core');
 
 const App = require('../../index');
 const appTester = zapier.createAppTester(App);
+zapier.tools.env.inject();
 
-describe('Trigger - get_paygroups', () => {
-  zapier.tools.env.inject();
+describe('Trigger - get_work_locations', () => {
 
   it('should get an array', async () => {
 
@@ -21,14 +19,14 @@ describe('Trigger - get_paygroups', () => {
 
     // act
     const results = await appTester(
-      App.triggers['get_paygroups'].operation.perform,
+      App.triggers['get_work_locations'].operation.perform,
       bundle
     );
-
+  
     // console.log('results',results)
   
     // assert
-    results.should.be.an.Array();
+    expect(results.length).toBeGreaterThan(0)
 
   });
 
