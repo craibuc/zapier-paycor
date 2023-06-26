@@ -1,7 +1,6 @@
 const authentication = require('./authentication');
 
-const onboardEmployeeCreate = require('./creates/onboard_employee.js');
-const getEmployeeCreate = require('./creates/get_employee.js');
+const createEmployeeCreate = require('./creates/create_employee.js');
 
 const findEmployeeSearch = require('./searches/find_employee.js');
 
@@ -17,8 +16,7 @@ module.exports = {
     [findEmployeeSearch.key]: findEmployeeSearch 
   },
   creates: {
-    [onboardEmployeeCreate.key]: onboardEmployeeCreate,
-    [getEmployeeCreate.key]: getEmployeeCreate,
+    [createEmployeeCreate.key]: createEmployeeCreate,
   },
   triggers: {
     [getDepartmentsTrigger.key]: getDepartmentsTrigger,
