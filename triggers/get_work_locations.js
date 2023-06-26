@@ -1,6 +1,5 @@
 const perform = async (z, bundle) => {
   const options = {
-    // url: `https://apis.paycor.com/v1/tenants/${bundle.authData.tenant_id}/worklocations`,
     url: `https://apis.paycor.com/v1/legalentities/${bundle.authData.legal_entity_id}/worklocations`,
     method: 'GET',
     headers: {
