@@ -1,13 +1,11 @@
-require('should');
-
 const zapier = require('zapier-platform-core');
 
 const App = require('../../index');
 const appTester = zapier.createAppTester(App);
+zapier.tools.env.inject();
 
 describe('Trigger - get_departments', () => {
-  zapier.tools.env.inject();
-
+  
   it('should get an array', async () => {
 
     // arrange
@@ -28,7 +26,7 @@ describe('Trigger - get_departments', () => {
     // console.log('results',results)
   
     // assert
-    results.should.be.an.Array();
+    expect(results.length).toBeGreaterThan(0)
 
   });
 
