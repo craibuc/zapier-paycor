@@ -1,13 +1,10 @@
-require('should');
-
 const zapier = require('zapier-platform-core');
 
 const App = require('../../index');
 const appTester = zapier.createAppTester(App);
+zapier.tools.env.inject();
 
 describe('Search - find_employee', () => {
-
-  zapier.tools.env.inject();
 
   describe('when a valid SSN is supplied', () => {
 
@@ -37,9 +34,8 @@ describe('Search - find_employee', () => {
       );
   
       // assert
-      results.should.be.an.Array();
-      results.length.should.be.equal(1);
-      results[0].should.have.property('employeeId');
+      expect(results[0]).toHaveProperty('employeeId');
+      expect(results.length).toBe(1)
   
     });
   
@@ -73,9 +69,8 @@ describe('Search - find_employee', () => {
       );
   
       // assert
-      results.should.be.an.Array();
-      results.length.should.be.equal(0);
-  
+      expect(results.length).toBe(0)
+
     });
   
   });
