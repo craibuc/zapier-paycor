@@ -1,6 +1,6 @@
 const perform = async (z, bundle) => {
   const options = {
-    url: 'https://apis.paycor.com/v1/employees',
+    url: 'https://{{bundle.authData.subdomain}}.paycor.com/v1/employees',
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -9,7 +9,7 @@ const perform = async (z, bundle) => {
       'Ocp-Apim-Subscription-Key': '{{bundle.authData.subscription_key}}',
     },
     body: {
-      LegalEntityId: '{{bundle.inputData.LegalEntityId}}',
+      LegalEntityId: '{{bundle.authData.legal_entity_id}}',
       EmployeeNumber: '{{bundle.inputData.EmployeeNumber}}',
       AlternateEmployeeNumber: '{{bundle.inputData.AlternateEmployeeNumber}}',
       Prefix: '{{bundle.inputData.Prefix}}',
@@ -19,7 +19,7 @@ const perform = async (z, bundle) => {
       Suffix: '{{bundle.inputData.Suffix}}',
       HomeEmail: '{{bundle.inputData.HomeEmail}}',
       WorkEmail: '{{bundle.inputData.WorkEmail}}',
-      Phones: '{{bundle.inputData.Phones}}',
+      Phones: [],
       SocialSecurityNumber: '{{bundle.inputData.SocialSecurityNumber}}',
       BirthDate: '{{bundle.inputData.BirthDate}}',
       Gender: '{{bundle.inputData.Gender}}',
@@ -43,12 +43,36 @@ const perform = async (z, bundle) => {
         Suite: '{{bundle.inputData.Suite}}',
         City: '{{bundle.inputData.City}}',
         State: '{{bundle.inputData.State}}',
-        Country: '{{bundle.inputData.Country}}',
-        County: '{{bundle.inputData.County}}',
         ZipCode: '{{bundle.inputData.ZipCode}}',
+        County: '{{bundle.inputData.County}}',
+        Country: '{{bundle.inputData.Country}}',
       }
     },
   };
+  
+  if (bundle.inputData.HomePhone) {
+    // remove all non-numeric values
+    const homePhone = bundle.inputData.HomePhone.replace(/\D/g,'');
+
+    options.body.Phones.push({
+      CountryCode: "+1",
+      AreaCode: homePhone.substr(0,3),
+      PhoneNumber: `${ homePhone.substr(3,3) }-${ homePhone.substr(6,4) }`,
+      Type: "Home"
+    });
+  }
+
+  if (bundle.inputData.MobilePhone) {
+    // remove all non-numeric values
+    const mobilePhone = bundle.inputData.MobilePhone.replace(/\D/g,'');
+
+    options.body.Phones.push({
+      CountryCode: "+1",
+      AreaCode: mobilePhone.substr(0,3),
+      PhoneNumber: `${ mobilePhone.substr(3,3) }-${ mobilePhone.substr(6,4) }`,
+      Type: "Mobile"
+    });  
+  }
 
   return z.request(options).then((response) => {
     response.throwForStatus();
@@ -61,16 +85,6 @@ module.exports = {
   operation: {
     perform: perform,
     inputFields: [
-      {
-        key: 'LegalEntityId',
-        label: 'Legal Entity ID',
-        type: 'integer',
-        dynamic: 'get_legal_entities.legalEntityId.legalEntityId',
-        required: true,
-        list: false,
-        altersDynamicFields: false,
-        helpText: "Employee's LegalEntityId."
-      },
       {
         key: 'EmployeeNumber',
         label: 'Employee #',
@@ -155,48 +169,23 @@ module.exports = {
         helpText: 'Work Email Information of the employee.'
       },
       {
-        key: 'Phones',
-        children: [
-          {
-            key: 'CountryCode',
-            label: 'Country Code',
-            type: 'string',
-            required: false,
-            list: false,
-            altersDynamicFields: false,
-          },
-          {
-            key: 'AreaCode',
-            label: 'Area Code',
-            type: 'string',
-            required: false,
-            list: false,
-            altersDynamicFields: false,
-          },
-          {
-            key: 'PhoneNumber',
-            label: 'Phone Number',
-            type: 'string',
-            required: false,
-            list: false,
-            altersDynamicFields: false,
-          },
-          {
-            key: 'Type',
-            label: 'Type',
-            type: 'string',
-            default: 'Mobile',
-            choices: ["Unknown",'Work','Home','Pager','Mobile','Fax','None'],
-            required: false,
-            list: false,
-            altersDynamicFields: false,
-          },
-
-        ],
-        label: 'Phones',
+        key: 'HomePhone',
+        label: 'Home Phone',
+        type: 'string',
         required: false,
+        list: false,
         altersDynamicFields: false,
-      },      
+        helpText: "Employee's home telephone number."
+      },
+      {
+        key: 'MobilePhone',
+        label: 'Mobile Phone',
+        type: 'string',
+        required: false,
+        list: false,
+        altersDynamicFields: false,
+        helpText: "Employee's mobile telephone number."
+      },
       {
         key: 'SocialSecurityNumber',
         label: 'Social Security #',
@@ -238,7 +227,7 @@ module.exports = {
       },
       {
         key: 'MaritalStatus',
-        label: 'MaritalStatus',
+        label: 'Marital Status',
         type: 'string',
         choices: ["Single","Married","Divorced","Separated","StateRecognizedUnion","Widowed"],
         helpText: "The employee's marital status.",
@@ -250,7 +239,7 @@ module.exports = {
         key: 'WorkLocation',
         label: 'Work Location',
         type: 'integer',
-        dynamic: 'get_work_locations.id.name',
+        dynamic: 'get_work_locations.name',
         required: false,
         list: false,
         altersDynamicFields: false,
@@ -260,6 +249,7 @@ module.exports = {
         key: 'JobTitle',
         label: 'Job Title',
         type: 'string',
+        dynamic: 'get_job_titles.jobTitle',
         required: false,
         list: false,
         altersDynamicFields: false,
@@ -340,10 +330,11 @@ module.exports = {
         key: 'ManagerEmpId',
         label: "Manager",
         type: 'string',
+        dynamic: 'get_managers.id.name',
         required: false,
         list: false,
         altersDynamicFields: false,
-        helpText: "Unique identifier of the manager in Paycor's system."
+        helpText: "The employee's manager."
       },
       {
         key: 'PaygroupDescription',
