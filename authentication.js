@@ -1,13 +1,65 @@
-module.exports = {
-  type: 'session',
-  test: {
+const perform = async (z, bundle) => {
+
+  const options = {
+    url: `https://${ bundle.authData.subdomain }.paycor.com/sts/v1/common/token`,
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded',
+      Accept: 'application/json',
+    },
+    params: { 'subscription-key': '{{bundle.authData.subscription_key}}' },
+    body: {
+      grant_type: 'refresh_token',
+      refresh_token: '{{bundle.authData.refresh_token}}',
+      client_id: '{{bundle.authData.client_id}}',
+      client_secret: '{{bundle.authData.client_secret}}',
+    },
+  };
+
+  // z.console.log('options',options)
+
+  return z.request(options).then((response) => {
+    response.throwForStatus();
+    const results = response.json;
+    // z.console.log('results',results)
+    return results;
+  });
+
+};
+
+const test = async (z, bundle) => {
+
+  const options = {
+    url: `https://${ bundle.authData.subdomain }.paycor.com/v1/legalentities/ActivatedLegalEntityTenantList`,
+    method: 'GET',
     headers: {
       Authorization: 'Bearer {{bundle.authData.access_token}}',
       'Ocp-Apim-Subscription-Key': '{{bundle.authData.subscription_key}}',
     },
-    url: 'https://apis.paycor.com/v1/legalentities/ActivatedLegalEntityTenantList',
-  },
+  };
+
+  return z.request(options).then((response) => {
+    response.throwForStatus();
+    const results = response.json;
+    // z.console.log('results',results)
+    return results;
+  });
+
+}
+
+module.exports = {
+  type: 'session',
+  test: test,
   fields: [
+    {
+      key: 'subdomain',
+      label: 'Server',
+      type: 'string',
+      required: true,
+      choices: { 'apis': 'Production', 'apis-sandbox': 'Sandbox' },
+      default: 'apis',
+      computed: false,
+    },
     {
       computed: false,
       key: 'client_id',
@@ -60,21 +112,7 @@ module.exports = {
     },
   ],
   sessionConfig: {
-    perform: {
-      body: {
-        grant_type: 'refresh_token',
-        refresh_token: '{{bundle.authData.refresh_token}}',
-        client_id: '{{bundle.authData.client_id}}',
-        client_secret: '{{bundle.authData.client_secret}}',
-      },
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
-        Accept: 'application/json',
-      },
-      method: 'POST',
-      params: { 'subscription-key': '{{bundle.authData.subscription_key}}' },
-      url: 'https://apis.paycor.com/sts/v1/common/token',
-    },
+    perform: perform,
   },
-  connectionLabel: '',
+  connectionLabel: '{{bundle.authData.subdomain}}.paycor.com'
 };

@@ -19,21 +19,24 @@ describe('authentication', () => {
 
         // arrange
         const bundle = {
-            authData: {
-                client_id: process.env.CLIENT_ID,
-                client_secret: process.env.CLIENT_SECRET,
-                refresh_token: process.env.REFRESH_TOKEN,
-                subscription_key: process.env.SUBSCRIPTION_KEY,
-            },
+          authData: {
+            subdomain: process.env.SUBDOMAIN,
+            client_id: process.env.CLIENT_ID,
+            client_secret: process.env.CLIENT_SECRET,
+            refresh_token: process.env.REFRESH_TOKEN,
+            subscription_key: process.env.SUBSCRIPTION_KEY,
+          },
         };
 
         it('an access token is returned', async () => {
         
             // act
             const results = await appTester(
-                App.authentication.sessionConfig.perform,
-                bundle
+              App.authentication.sessionConfig.perform,
+              bundle
             );
+
+            // console.log('authData',bundle.authData)
 
             // assert
             expect(results).toHaveProperty('access_token');
@@ -41,23 +44,24 @@ describe('authentication', () => {
       
     });
 
-    describe.skip('when invalid credentials are supplied', () => {
+    describe('when invalid credentials are supplied', () => {
 
         // arrange
         const bundle = {
-            authData: {
-                client_id: '40038d33-cb15-4b68-98ef-f05fe44d6904',
-                client_secret: '40038d33-cb15-4b68-98ef-f05fe44d6904',
-                refresh_token: '40038d33-cb15-4b68-98ef-f05fe44d6904',
-            },
+          authData: {
+            subdomain: process.env.SUBDOMAIN,
+            client_id: '40038d33-cb15-4b68-98ef-f05fe44d6904',
+            client_secret: '40038d33-cb15-4b68-98ef-f05fe44d6904',
+            refresh_token: '40038d33-cb15-4b68-98ef-f05fe44d6904',
+          },
         };
 
       it('throws an error', async () => {
 
         // act/assert
         await expect(appTester(
-            App.authentication.test,
-            bundle
+          App.authentication.test,
+          bundle
         )).rejects.toThrow();
 
       });
@@ -66,7 +70,7 @@ describe('authentication', () => {
 
   });
 
-  describe.skip('test', () => {
+  describe('test', () => {
   
     describe('when valid credentials are supplied', () => {
 
@@ -74,10 +78,11 @@ describe('authentication', () => {
     
         // arrange
         const bundle = {
-            authData: {
-                access_token: process.env.ACCESS_TOKEN,
-                subscription_key: process.env.SUBSCRIPTION_KEY,
-            }
+          authData: {
+            subdomain: process.env.SUBDOMAIN,
+            access_token: process.env.ACCESS_TOKEN,
+            subscription_key: process.env.SUBSCRIPTION_KEY,
+          }
         };
 
         // act
@@ -86,7 +91,7 @@ describe('authentication', () => {
             bundle
         );
 
-        console.log('results',results)
+        // console.log('results',results)
 
         // assert
         expect(results.userLegalEntities[0]).toHaveProperty('legalEntityId');
@@ -102,16 +107,17 @@ describe('authentication', () => {
 
         // arrange
         const bundle = {
-            authData: {
-                access_token: '40038d33-cb15-4b68-98ef-f05fe44d6904',
-                subscription_key: '40038d33-cb15-4b68-98ef-f05fe44d6904',
-            }
+          authData: {
+            subdomain: process.env.SUBDOMAIN,
+            access_token: '40038d33-cb15-4b68-98ef-f05fe44d6904',
+            subscription_key: '40038d33-cb15-4b68-98ef-f05fe44d6904',
+          }
         };
 
         // act/assert
         await expect(appTester(
-            App.authentication.test,
-            bundle
+          App.authentication.test,
+          bundle
         )).rejects.toThrow();
 
       });
