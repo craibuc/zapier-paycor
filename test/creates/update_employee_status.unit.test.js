@@ -13,6 +13,7 @@ describe('Create - update_employee_status', () => {
     // arrange
     const bundle = {
       authData: {
+        subdomain: process.env.SUBDOMAIN,
         access_token: process.env.ACCESS_TOKEN,
         subscription_key: process.env.SUBSCRIPTION_KEY,
       },
@@ -28,7 +29,7 @@ describe('Create - update_employee_status', () => {
     };
 
     // mocks the next request that matches this url and body
-    nock('https://apis.paycor.com/v1')
+    nock(`https://${bundle.authData.subdomain}.paycor.com/v1`)
       .put(`/employees/${ bundle.inputData.EmployeeId }/status`)
       .reply(200, {
         ResourceUrl: { 
