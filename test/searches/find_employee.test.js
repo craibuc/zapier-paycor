@@ -4,6 +4,8 @@ const App = require('../../index');
 const appTester = zapier.createAppTester(App);
 zapier.tools.env.inject();
 
+const nock = require('nock');
+
 describe('Search - find_employee', () => {
 
   describe('when a valid SSN is supplied', () => {
@@ -26,7 +28,27 @@ describe('Search - find_employee', () => {
           ssn: process.env.SSN,
         },
       };
+      
+      const response = {
+        "hasMoreResults": false,
+        "records": [
+            {
+                "firstName": "John",
+                "lastName": "Doe",
+                "socialSecurityNumber": "000000000",
+                "employeeId": 'bfdd24cf-a9a8-4da2-a09b-a62093432d97',
+                "employeeNumber": "123456",
+                "birthDate": "2000-01-01T00:00:00",
+                "status": "Active"
+            }
+        ]
+      }
   
+      // mocks the next request that matches this url and body
+      nock(`https://${bundle.authData.subdomain}.paycor.com/v1`)
+        .get(`/legalentities/${bundle.authData.legal_entity_id}/employeesIdentifyingData`)
+        .reply(200, response);
+    
       // act
       const results = await appTester(
         App.searches['find_employee'].operation.perform,
