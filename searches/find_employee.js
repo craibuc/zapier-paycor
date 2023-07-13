@@ -25,7 +25,7 @@ const perform = async (z, bundle) => {
   let employees = []
   let proceed = false
 
-  const baseUrl = 'https://apis.paycor.com'
+  const baseUrl = 'https://{{bundle.authData.subdomain}}.paycor.com'
   let path = `/v1/legalentities/${bundle.authData.legal_entity_id}/employeesIdentifyingData`
 
   const ssn = bundle.inputData.ssn.replace(/-/g,'')
