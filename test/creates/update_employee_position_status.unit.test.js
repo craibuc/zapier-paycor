@@ -6,7 +6,7 @@ zapier.tools.env.inject();
 
 const nock = require('nock');
 
-describe('Create - update_employee_status', () => {
+describe('Create - update_employee_position_status', () => {
 
   it('updates an object', async () => {
 

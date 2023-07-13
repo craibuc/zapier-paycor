@@ -8,7 +8,7 @@ beforeAll(() => {
   // TODO: get a new access token
 });
 
-describe('Create - update_employee_status', () => {
+describe('Create - update_employee_position_status', () => {
 
   it('updates an object', async () => {
 
@@ -32,7 +32,7 @@ describe('Create - update_employee_status', () => {
 
     // act
     const result = await appTester(
-      App.creates['update_employee_status'].operation.perform,
+      App.creates['update_employee_position_status'].operation.perform,
       bundle
     );
 
