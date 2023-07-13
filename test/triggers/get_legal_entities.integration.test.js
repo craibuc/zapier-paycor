@@ -4,7 +4,9 @@ const App = require('../../index');
 const appTester = zapier.createAppTester(App);
 zapier.tools.env.inject();
 
-const nock = require('nock');
+beforeAll(() => {
+  // TODO: get a new access token
+});
 
 describe('Trigger - get_legal_entities', () => {
 
@@ -19,20 +21,6 @@ describe('Trigger - get_legal_entities', () => {
       },
     };
 
-    const response = {
-      "userLegalEntities": [
-          {
-              "legalEntityId": 111111,
-              "tenantId": 222222
-          }
-      ]
-    }
-
-    // mocks the next request that matches this url and body
-    nock(`https://${bundle.authData.subdomain}.paycor.com/v1`)
-      .get('/legalentities/ActivatedLegalEntityTenantList')
-      .reply(200, response);
-  
     // act
     const results = await appTester(
       App.triggers['get_legal_entities'].operation.perform,

@@ -1,6 +1,6 @@
 const perform = async (z, bundle) => {
   const options = {
-    url: 'https://apis.paycor.com/v1/legalentities/ActivatedLegalEntityTenantList',
+    url: 'https://{{bundle.authData.subdomain}}.paycor.com/v1/legalentities/ActivatedLegalEntityTenantList',
     method: 'GET',
     headers: {
       Accept: 'application/json',
