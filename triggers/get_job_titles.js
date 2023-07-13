@@ -13,7 +13,7 @@ const perform = async (z, bundle) => {
     response.throwForStatus();
     const results = response.json;
 
-    // becasue Zapier requires that each array element have an id property
+    // because Zapier requires that each array element have an id property
     results.records.forEach(element => {
       element.id = element.jobTitleId
     });
