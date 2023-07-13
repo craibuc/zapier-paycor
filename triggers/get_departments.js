@@ -1,6 +1,6 @@
 const perform = async (z, bundle) => {
   const options = {
-    url: `https://apis.paycor.com/v1/legalentities/${bundle.authData.legal_entity_id}/departments`,
+    url: `https://{{bundle.authData.subdomain}}.paycor.com/v1/legalentities/${bundle.authData.legal_entity_id}/departments`,
     method: 'GET',
     headers: {
       Accept: 'application/json',
@@ -20,16 +20,6 @@ const perform = async (z, bundle) => {
 module.exports = {
   operation: {
     perform: perform,
-    // inputFields: [
-      // {
-      //   key: 'legal_entity_id',
-      //   type: 'integer',
-      //   label: 'Legal Entity ID',
-      //   required: true,
-      //   list: false,
-      //   altersDynamicFields: false,
-      // },
-    // ],
     sample: 
     {
       Id: "cb4a1b67-000c-0000-0000-000066000000",
@@ -43,6 +33,7 @@ module.exports = {
       WorkLocationName: "ACME East is an open concept office."
     },
     outputFields: [
+      { key: 'id', type: 'string' },
       { key: 'code', type: 'integer' },
       { key: 'description', type: 'string' },
     ],
