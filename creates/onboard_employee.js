@@ -14,17 +14,17 @@ const perform = async (z, bundle) => {
       LastName: bundle.inputData.LastName,
       PreferredName: bundle.inputData.PreferredName,
       Gender: bundle.inputData.Gender,
+      Ethnicity: bundle.inputData.Ethnicity,
       VeteranStatus: bundle.inputData.VeteranStatus,
       Disability: bundle.inputData.Disability,
-      Ethnicity: bundle.inputData.Ethnicity,
       Address1: bundle.inputData.Address1,
       Address2: bundle.inputData.Address2,
       City: bundle.inputData.City,
       State: bundle.inputData.State,
       Zip: bundle.inputData.Zip,
       CountryCode: bundle.inputData.CountryCode,
-      MobilePhone: bundle.inputData.MobilePhone,
       HomePhone: bundle.inputData.HomePhone,
+      MobilePhone: bundle.inputData.MobilePhone,
       HomeEmailAddress: bundle.inputData.HomeEmailAddress,
       WorkLocationId: bundle.inputData.WorkLocationId,
       DepartmentCode: bundle.inputData.DepartmentCode,
@@ -34,11 +34,13 @@ const perform = async (z, bundle) => {
       SalaryFrequency: bundle.inputData.SalaryFrequency,
     },
   };
+  
+  console.log('body',options.body)
 
   return z.request(options).then((response) => {
     response.throwForStatus();
     const results = response.json;
-    return results.ResourceUrl;
+    return results.resourceUrl;
   });
 };
 
@@ -47,11 +49,12 @@ module.exports = {
   noun: 'Employee',
   display: {
     label: 'Onboard Employee',
-    description: 'Creates an employee and related model entities using a single method.',
+    description: 'Creates an employee and adds them to the on-boarding process.',
     hidden: false,
     important: true,
   },
   operation: {
+    perform: perform,
     inputFields: [
       {
         key: 'FirstName',
@@ -98,7 +101,7 @@ module.exports = {
         altersDynamicFields: false,
       },
       {
-        key: 'Veteran',
+        key: 'VeteranStatus',
         label: 'Veteran',
         type: 'string',
         choices: ["Yes","No","DeclinedToIdentify"],
@@ -135,20 +138,12 @@ module.exports = {
       },
       {
         key: 'HomeEmailAddress',
-        label: 'Email Address (home)',
+        label: 'Email Address (personal)',
         type: 'string',
         required: true,
         list: false,
         altersDynamicFields: false,
       },
-      // {
-      //   key: 'ExportedByEmailAddress',
-      //   label: 'Email Address (exported)',
-      //   type: 'string',
-      //   required: false,
-      //   list: false,
-      //   altersDynamicFields: false,
-      // },
       {
         key: 'Address1',
         label: 'Address 1',
@@ -201,7 +196,7 @@ module.exports = {
         key: 'WorkLocationId',
         label: 'Work Location',
         type: 'string',
-        dynamic: 'get_work_locations.id',
+        dynamic: 'get_work_locations.id.name',
         required: false,
         list: false,
         altersDynamicFields: false,
@@ -210,8 +205,8 @@ module.exports = {
       {
         key: 'DepartmentCode',
         label: 'Department',
-        type: 'string',
-        dynamic: 'get_departments.id.description',
+        type: 'integer',
+        dynamic: 'get_departments.code.description',
         required: false,
         list: false,
         altersDynamicFields: false,
@@ -221,7 +216,6 @@ module.exports = {
         key: 'JobTitle',
         label: 'Job Title',
         type: 'string',
-        // dynamic: 'get_job_titles.jobTitle',
         required: false,
         list: false,
         altersDynamicFields: false,
@@ -254,11 +248,13 @@ module.exports = {
         helpText: "The payroll frequency."
       },
     ],
+    outputFields: [
+      { key: 'id', type: 'string' },
+      { key: 'url', type: 'string' },
+    ],
     sample: {
       Id: 'd63759d5-40cc-4ec2-98df-772342f1b974',
       Url: 'v1/myresources/resource?resourceID=d63759d5-40cc-4ec2-98df-772342f1b974',
     },
-    outputFields: [{ key: 'Id' }, { key: 'Url' }],
-    perform: perform,
   },
 };
