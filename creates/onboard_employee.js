@@ -238,7 +238,7 @@ module.exports = {
       {
         key: 'BaseSalary',
         label: 'Base Salary',
-        type: 'decimal',
+        type: 'number',
         required: false,
         list: false,
         altersDynamicFields: false,
