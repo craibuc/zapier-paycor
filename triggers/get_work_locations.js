@@ -22,7 +22,8 @@ module.exports = {
     perform: perform,
     canPaginate: false,
     outputFields: [
-      { key: 'name' }
+      { key: 'id', type: 'string' },
+      { key: 'name', type: 'string' },
     ],
     sample: {
       Id: "5245ae3d-e570-0000-0000-000066000000",
