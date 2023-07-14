@@ -151,51 +151,6 @@ module.exports = {
         altersDynamicFields: false,
       },
       {
-        key: 'HomeEmail',
-        label: 'Home Email',
-        type: 'string',
-        required: false,
-        list: false,
-        altersDynamicFields: false,
-        helpText: 'Home Email Information of the employee.'
-      },
-      {
-        key: 'WorkEmail',
-        label: 'Work Email',
-        type: 'string',
-        required: false,
-        list: false,
-        altersDynamicFields: false,
-        helpText: 'Work Email Information of the employee.'
-      },
-      {
-        key: 'HomePhone',
-        label: 'Home Phone',
-        type: 'string',
-        required: false,
-        list: false,
-        altersDynamicFields: false,
-        helpText: "Employee's home telephone number."
-      },
-      {
-        key: 'MobilePhone',
-        label: 'Mobile Phone',
-        type: 'string',
-        required: false,
-        list: false,
-        altersDynamicFields: false,
-        helpText: "Employee's mobile telephone number."
-      },
-      {
-        key: 'SocialSecurityNumber',
-        label: 'Social Security #',
-        type: 'string',
-        required: false,
-        list: false,
-        altersDynamicFields: false,
-        helpText: 'Social Security number of the employee.'
-      },
-      {
         key: 'BirthDate',
         label: 'Birth Date',
         type: 'datetime',
@@ -226,6 +181,15 @@ module.exports = {
         altersDynamicFields: false,
       },
       {
+        key: 'SocialSecurityNumber',
+        label: 'Social Security #',
+        type: 'string',
+        required: false,
+        list: false,
+        altersDynamicFields: false,
+        helpText: 'Social Security number of the employee.'
+      },
+      {
         key: 'MaritalStatus',
         label: 'Marital Status',
         type: 'string',
@@ -233,6 +197,134 @@ module.exports = {
         helpText: "The employee's marital status.",
         required: false,
         list: false,
+        altersDynamicFields: false,
+      },
+      {
+        key: 'Veteran',
+        label: 'Veteran',
+        type: 'string',
+        choices: ["Yes","No","DeclinedToIdentify"],
+        required: false,
+        list: false,
+        altersDynamicFields: false,
+        helpText: 'Veteran types'
+      },
+      {
+        key: 'Disability',
+        label: 'Disability',
+        type: 'string',
+        choices: ["Yes","No","DeclinedToIdentify"],
+        required: false,
+        list: false,
+        altersDynamicFields: false,
+        helpText: 'Disability types'
+      },
+      {
+        key: 'HomePhone',
+        label: 'Home Phone',
+        type: 'string',
+        required: false,
+        list: false,
+        altersDynamicFields: false,
+        helpText: "Employee's home telephone number."
+      },
+      {
+        key: 'MobilePhone',
+        label: 'Mobile Phone',
+        type: 'string',
+        required: false,
+        list: false,
+        altersDynamicFields: false,
+        helpText: "Employee's mobile telephone number."
+      },
+      {
+        key: 'HomeEmail',
+        label: 'Email Address (personal)',
+        type: 'string',
+        required: false,
+        list: false,
+        altersDynamicFields: false,
+        helpText: "The employee's personal email address."
+      },
+      {
+        key: 'WorkEmail',
+        label: 'Email Address (work)',
+        type: 'string',
+        required: false,
+        list: false,
+        altersDynamicFields: false,
+        helpText: "The employee's work email address."
+      },
+      {
+        key: 'PrimaryAddress',
+        children: [
+          {
+            key: 'StreetLine1',
+            label: 'Street 1',
+            type: 'string',
+            required: true,
+            list: false,
+            altersDynamicFields: false,
+          },
+          {
+            key: 'StreetLine2',
+            label: 'Street 2',
+            type: 'string',
+            required: false,
+            list: false,
+            altersDynamicFields: false,
+          },
+          {
+            key: 'Suite',
+            label: 'Suite',
+            type: 'string',
+            required: false,
+            list: false,
+            altersDynamicFields: false,
+          },
+          {
+            key: 'City',
+            label: 'City',
+            type: 'string',
+            required: false,
+            list: false,
+            altersDynamicFields: false,
+          },
+          {
+            key: 'State',
+            label: 'State',
+            type: 'string',
+            required: false,
+            list: false,
+            altersDynamicFields: false,
+          },
+          {
+            key: 'ZipCode',
+            label: 'Postal Code',
+            type: 'string',
+            required: true,
+            list: false,
+            altersDynamicFields: false,
+          },
+          {
+            key: 'County',
+            label: 'County',
+            type: 'string',
+            required: false,
+            list: false,
+            altersDynamicFields: false,
+          },
+          {
+            key: 'Country',
+            label: 'Country',
+            type: 'string',
+            required: false,
+            list: false,
+            altersDynamicFields: false,
+          },
+        ],
+        label: 'Primary Address',
+        required: true,
         altersDynamicFields: false,
       },
       {
@@ -244,6 +336,16 @@ module.exports = {
         list: false,
         altersDynamicFields: false,
         helpText: 'The name of the Work Location to associate with new hire.'
+      },
+      {
+        key: 'DepartmentCode',
+        label: 'Department',
+        type: 'integer',
+        dynamic: 'get_departments.code.description',
+        required: true,
+        list: false,
+        altersDynamicFields: false,
+        helpText: 'Department'
       },
       {
         key: 'JobTitle',
@@ -347,109 +449,6 @@ module.exports = {
         helpText: 'Pay group'
 
       },
-      {
-        key: 'DepartmentCode',
-        label: 'Department',
-        type: 'integer',
-        dynamic: 'get_departments.code.description',
-        required: true,
-        list: false,
-        altersDynamicFields: false,
-        helpText: 'Department'
-      },
-      {
-        key: 'Veteran',
-        label: 'Veteran',
-        type: 'string',
-        choices: ["Yes","No","DeclinedToIdentify"],
-        required: false,
-        list: false,
-        altersDynamicFields: false,
-        helpText: 'Veteran types'
-      },
-      {
-        key: 'Disability',
-        label: 'Disability',
-        type: 'string',
-        choices: ["Yes","No","DeclinedToIdentify"],
-        required: false,
-        list: false,
-        altersDynamicFields: false,
-        helpText: 'Disability types'
-      },
-      {
-        key: 'PrimaryAddress',
-        children: [
-          {
-            key: 'StreetLine1',
-            label: 'Street 1',
-            type: 'string',
-            required: true,
-            list: false,
-            altersDynamicFields: false,
-          },
-          {
-            key: 'StreetLine2',
-            label: 'Street 2',
-            type: 'string',
-            required: false,
-            list: false,
-            altersDynamicFields: false,
-          },
-          {
-            key: 'Suite',
-            label: 'Suite',
-            type: 'string',
-            required: false,
-            list: false,
-            altersDynamicFields: false,
-          },
-          {
-            key: 'City',
-            label: 'City',
-            type: 'string',
-            required: false,
-            list: false,
-            altersDynamicFields: false,
-          },
-          {
-            key: 'State',
-            label: 'State',
-            type: 'string',
-            required: false,
-            list: false,
-            altersDynamicFields: false,
-          },
-          {
-            key: 'Country',
-            label: 'Country',
-            type: 'string',
-            required: false,
-            list: false,
-            altersDynamicFields: false,
-          },
-          {
-            key: 'County',
-            label: 'County',
-            type: 'string',
-            required: false,
-            list: false,
-            altersDynamicFields: false,
-          },
-          {
-            key: 'ZipCode',
-            label: 'Postal Code',
-            type: 'string',
-            required: true,
-            list: false,
-            altersDynamicFields: false,
-          },
-
-        ],
-        label: 'Primary Address',
-        required: true,
-        altersDynamicFields: false,
-      },      
     ],
     sample: {
       Id: 'd63759d5-40cc-4ec2-98df-772342f1b974',
